@@ -155,19 +155,19 @@ data$month=substr(data$datetime,6,7)
 
 data$month=as.integer(data$month)
 
-#table(data$windspeed==0)
-#k=data$windspeed==0
-#wind_0=subset(data,k)
-#wind_1=subset(data,!k)
+table(data$windspeed==0)
+k=data$windspeed==0
+wind_0=subset(data,k)
+wind_1=subset(data,!k)
 
-#library(randomForest)
+library(randomForest)
 
-#set.seed(415)
-#fit <- randomForest(windspeed ~ season+weather +humidity +month+temp+ year+atemp, data=wind_1,importance=TRUE, ntree=250)
-#pred=predict(fit,wind_0)
-#wind_0$windspeed=pred
+set.seed(415)
+fit <- randomForest(windspeed ~ season+weather +humidity +month+temp+ year+atemp, data=wind_1,importance=TRUE, ntree=250)
+pred=predict(fit,wind_0)
+wind_0$windspeed=pred
 
-#data=rbind(wind_0,wind_1)
+data=rbind(wind_0,wind_1)
 
 data$sunday=0
 data$sunday[data$day=="Sunday"]=1
