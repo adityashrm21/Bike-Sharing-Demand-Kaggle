@@ -169,8 +169,8 @@ wind_0$windspeed=pred
 
 data=rbind(wind_0,wind_1)
 
-data$sunday=0
-data$sunday[data$day=="Sunday" | data$day=="saturday"]=1
+data$weekend=0
+data$weekend[data$day=="Sunday" | data$day=="Saturday"]=1
 
 
 str(data)
