@@ -170,7 +170,7 @@ wind_0$windspeed=pred
 data=rbind(wind_0,wind_1)
 
 data$sunday=0
-data$sunday[data$day=="Sunday"]=1
+data$sunday[data$day=="Sunday" | data$day=="saturday"]=1
 
 
 str(data)
@@ -181,8 +181,8 @@ data$workingday=as.factor(data$workingday)
 data$weather=as.factor(data$weather)
 data$hour=as.factor(data$hour)
 data$month=as.factor(data$month)
-data$day_part=as.factor(data$day_part)
-data$day_type=as.factor(data$day_type)
+data$day_part=as.factor(data$dp_cas)
+data$day_type=as.factor(data$dp_reg)
 data$day=as.factor(data$day)
 data$temp_cas=as.factor(data$temp_cas)
 data$temp_reg=as.factor(data$temp_reg)
