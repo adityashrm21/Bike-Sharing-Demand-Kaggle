@@ -205,12 +205,12 @@ boxplot(train$logreg~train$weather,xlab="weather", ylab="registered users")
 
 
 set.seed(415)
-fit1 <- randomForest(logreg ~ hour +workingday+day+holiday+ day_type +temp_reg+humidity+atemp+windspeed+season+weather+dp_reg+sunday+year+year_part, data=train,importance=TRUE, ntree=250)
+fit1 <- randomForest(logreg ~ hour +workingday+day+holiday+ day_type +temp_reg+humidity+atemp+windspeed+season+weather+dp_reg+weekend+year+year_part, data=train,importance=TRUE, ntree=250)
  pred1=predict(fit1,test)
  test$logreg=pred1
  
  set.seed(415)
- fit2 <- randomForest(logcas ~hour + day_type+day+humidity+atemp+temp_cas+windspeed+season+weather+holiday+workingday+dp_cas+sunday+year+year_part, data=train,importance=TRUE, ntree=250)
+ fit2 <- randomForest(logcas ~hour + day_type+day+humidity+atemp+temp_cas+windspeed+season+weather+holiday+workingday+dp_cas+weekend+year+year_part, data=train,importance=TRUE, ntree=250)
  pred2=predict(fit2,test)
  test$logcas=pred2
  
