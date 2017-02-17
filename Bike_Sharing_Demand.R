@@ -1,6 +1,6 @@
 setwd("E:/kaggle data/bike sharing")
 
-
+#reading the data files
 train=read.csv("train_bike.csv")
 test=read.csv("test_bike.csv")
 str(train)
@@ -15,21 +15,25 @@ str(data)
 
 summary(data)
 
+#factoring some variables from numeric
 data$season=as.factor(data$season)
 data$weather=as.factor(data$weather)
 data$holiday=as.factor(data$holiday)
 data$workingday=as.factor(data$workingday)
 
+#extracting hour from the datetime variable
 data$hour=substr(data$datetime,12,13)
 data$hour=as.factor(data$hour)
 
 train=data[as.integer(substr(data$datetime,9,10))<20,]
 test=data[as.integer(substr(data$datetime,9,10))>19,]
 
+
 boxplot(train$count~train$hour,xlab="hour", ylab="count of users")
 boxplot(train$casual~train$hour,xlab="hour", ylab="casual users")
 boxplot(train$registered~train$hour,xlab="hour", ylab="registered users")
 
+#extracting days of week from datetime
 date=substr(data$datetime,1,10)
 days<-weekdays(as.Date(date))
 data$day=days
@@ -37,6 +41,7 @@ data$day=days
 train=data[as.integer(substr(data$datetime,9,10))<20,]
 test=data[as.integer(substr(data$datetime,9,10))>19,]
 
+#creating boxplots for rentals with different variables
 boxplot(train$registered~train$day,xlab="day", ylab="registered users")
 boxplot(train$casual~train$day,xlab="day", ylab="casual users")
 
@@ -81,6 +86,7 @@ library(rattle)
 library(rpart.plot)
 library(RColorBrewer)
 
+#using decision trees for binning some variables
 d=rpart(registered~hour,data=train)
 fancyRpartPlot(d)
 
@@ -162,6 +168,7 @@ wind_1=subset(data,!k)
 
 library(randomForest)
 
+#Predicting missing values in windspeed using a random forest model
 set.seed(415)
 fit <- randomForest(windspeed ~ season+weather +humidity +month+temp+ year+atemp, data=wind_1,importance=TRUE, ntree=250)
 pred=predict(fit,wind_0)
@@ -191,6 +198,7 @@ train=data[as.integer(substr(data$datetime,9,10))<20,]
 test=data[as.integer(substr(data$datetime,9,10))>19,]
 
 
+#log transformation for some skewed variables
 train$reg1=train$registered+1
 train$cas1=train$casual+1
 train$logcas=log(train$cas1)
@@ -201,9 +209,7 @@ test$logcas=0
 boxplot(train$logreg~train$weather,xlab="weather", ylab="registered users")
  boxplot(train$logreg~train$season,xlab="season", ylab="registered users")
 
-
-
-
+#final model building using random forest
 set.seed(415)
 fit1 <- randomForest(logreg ~ hour +workingday+day+holiday+ day_type +temp_reg+humidity+atemp+windspeed+season+weather+dp_reg+weekend+year+year_part, data=train,importance=TRUE, ntree=250)
  pred1=predict(fit1,test)
@@ -214,6 +220,7 @@ fit1 <- randomForest(logreg ~ hour +workingday+day+holiday+ day_type +temp_reg+h
  pred2=predict(fit2,test)
  test$logcas=pred2
  
+#creating a submission file
  test$registered=exp(test$logreg)-1
  test$casual=exp(test$logcas)-1
  test$count=test$casual+test$registered
